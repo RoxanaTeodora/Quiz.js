@@ -1,18 +1,3 @@
-function outer() {
-  let counter = 0;
-
-  function incrementCounter() {
-    counter++;
-    return counter;
-  }
-
-  return incrementCounter;
-}
-
-const mynewFunc = outer();
-console.log(mynewFunc());
-console.log(mynewFunc());
-
 const nextButton = document.getElementById("next-question");
 const previousButton = document.getElementById("previos-question");
 const optionButtons = document.getElementById("options").children;
@@ -55,11 +40,11 @@ let fact;
 let correct = 0;
 let completed = 0;
 
-const hide = (explanation) => explanation.classList.add("hidden");
-const show = (explanation) => explanation.classList.remove("hidden");
+const hideExplanation = (explanation) => explanation.classList.add("hidden");
+const showExplanation = (explanation) => explanation.classList.remove("hidden");
 
-const disable = (button) => button.setAttribute("disabled", "");
-const enable = (button) => button.removeAttribute("disabled");
+const disableBtn = (button) => button.setAttribute("disabled", "");
+const enableBtn = (button) => button.removeAttribute("disabled");
 
 nextButton.addEventListener("click", getNextFactToQuestion);
 
@@ -68,8 +53,7 @@ function getNextFactToQuestion() {
   const factToQuestion = document.getElementById("statement");
   factToQuestion.textContent = fact.statement;
 
-  // hide any previous explanation
-  hide(explanation);
+  hideExplanation(explanation);
   console.log(factToQuestion.textContent);
 
   for (let option of optionButtons) {
@@ -77,11 +61,10 @@ function getNextFactToQuestion() {
     option.classList.remove("correct");
     option.classList.remove("incorrect");
     // make sure buttons are enabled
-    enable(option);
+    enableBtn(option);
   }
 
-  // disable next-question button
-  disable(nextButton);
+  disableBtn(nextButton);
 }
 
 for (let option of optionButtons) {
@@ -90,29 +73,26 @@ for (let option of optionButtons) {
 
     // disable all the option buttons
     for (let button of optionButtons) {
-      disable(button);
+      disableBtn(button);
     }
 
     // enable the 'next question' button, if we still have facts left
     if (facts.length > 0) {
-      enable(nextButton);
+      enableBtn(nextButton);
     } else {
-      nextButton.textContent = "No more questions!"; //display message for end game
+      nextButton.textContent = "No more questions!";
     }
 
     const guess = e.target.value;
     if (guess === fact.answer) {
-      // correct answer!
       e.target.classList.add("correct");
       correct++;
     } else {
-      // wrong answer!
       e.target.classList.add("incorrect");
     }
 
-    // display the explanation
     explanation.textContent = fact.explanation;
-    show(explanation);
+    showExplanation(explanation);
 
     // update the score
     completed++;
